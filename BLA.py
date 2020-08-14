@@ -22,11 +22,11 @@ def BAN(X, Y, U, V, P):
     ------------
     f : array (n_att_dim, )
     """
-    F = copy.copy(X.T @ U) # if K != N
+    F = copy.copy(X.T) # if K != N
     for i in range(P.shape[1]):
-        A = X.T @ U * P[:,i] @ V.T @ Y
+        A = F.T @ U[i] * P[:,i] @ V.T @ Y
         A = np.exp(A) / np.sum(np.exp(A)) # bilinear pool
-        f = np.diag(U.T @ X @ A @ Y.T @ V) # bilinear attention
+        f = np.diag(U.T @ F @ A @ Y.T @ V) # bilinear attention
         F = f + F
     f = np.sum(F, axis=-1)
     print(f.shape)
